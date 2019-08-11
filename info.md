@@ -92,5 +92,5 @@ python -c 'import requests; r = requests.get("https://test.ansible.com"); print(
 ```
 This fails because pip installed requests doesn't have Fedora/CentOS/RHEL customizations.  To get it to work we have to do:
 ```
-python -c 'import requests; r = requests.get("https://test.ansible.com", verify="myca.crt"); print(r)'
+python -c 'import requests; r = requests.get("https://test.ansible.com", verify="/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"); print(r)'
 ```
