@@ -20,7 +20,7 @@ docker run --detach --rm --expose 80 --expose 443 --name nginx centos:7 init
 docker exec -i -t nginx bash
 yum -y install epel-release net-tools telnet vim lsof psmisc
 yum -y install nginx
-vim /usr/share/nginx/html/index.html
+sed -i 's|<div class="content">|<div class="content"><p>Kilroy was here</p>|' /usr/share/nginx/html/index.html
 nginx
 ifconfig
 (on host) sudo vi /etc/hosts, add entry for test.ansible.com
