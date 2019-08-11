@@ -81,6 +81,7 @@ python -c 'import requests; r = requests.get("https://test.ansible.com"); print(
 sudo cp myca.crt /etc/pki/ca-trust/source/anchors/
 sudo update-ca-trust
 ```
+With Fedora/CentOS/RHEL system-installed requests, this works.
 
 # Now try pip installed requests
 ```
@@ -89,8 +90,7 @@ virtualenv foo
 pip install requests
 python -c 'import requests; r = requests.get("https://test.ansible.com"); print(r)'
 ```
-This fails but
+This fails because pip installed requests doesn't have Fedora/CentOS/RHEL customizations.  To get it to work we have to do:
 ```
 python -c 'import requests; r = requests.get("https://test.ansible.com", verify="myca.crt"); print(r)'
 ```
-succeeds.
