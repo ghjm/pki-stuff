@@ -57,10 +57,10 @@ cd ~/myca/
 # Sign the CSR from the web server:
 ```
 docker cp mycert.req ca:/root/myca/pki/reqs
-docker exec -i -t --workdir /root/myca ca ./easyrsa sign-req server mycert
+(on ca) ./easyrsa sign-req server mycert
 docker cp ca:/root/myca/pki/issued/mycert.crt mycert-signed.crt
 docker cp mycert-signed.crt nginx:/etc/pki/nginx/server.crt
-docker exec -i -t nginx nginx -s reload
+(on nginx) nginx -s reload
 Note that https://test.ansible.com works but gives error that cert is from unknown authority
 ```
 
