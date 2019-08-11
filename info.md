@@ -56,11 +56,11 @@ cd ~/myca/
 
 # Sign the CSR from the web server:
 ```
-(on host) docker cp mycert.req ca:/root/myca/pki/reqs
-./easyrsa sign-req server mycert
-(on host) docker cp ca:/root/myca/pki/issued/mycert.crt mycert-signed.crt
-(on host) docker cp mycert-signed.crt nginx:/etc/pki/nginx/server.crt
-(on nginx) nginx -s reload
+docker cp mycert.req ca:/root/myca/pki/reqs
+docker exec -i -t --workdir /root/myca ca ./easyrsa sign-req server mycert
+docker cp ca:/root/myca/pki/issued/mycert.crt mycert-signed.crt
+docker cp mycert-signed.crt nginx:/etc/pki/nginx/server.crt
+docker exec -i -t nginx nginx -s reload
 Note that https://test.ansible.com works but gives error that cert is from unknown authority
 ```
 
@@ -71,9 +71,26 @@ Import CA into Firefox
 https://test.ansible.com is secure!
 ```
 
+# Now try making the request from Python
+```
+python -c 'import requests; r = requests.get("https://test.ansible.com"); print(r)'
+```
+
 # Add CA cert to Fedora/RHEL/CentOS system trust:
 ```
 sudo cp myca.crt /etc/pki/ca-trust/source/anchors/
 sudo update-ca-trust
 ```
 
+# Now try pip installed requests
+```
+virtualenv foo
+. foo/bin/activate
+pip install requests
+python -c 'import requests; r = requests.get("https://test.ansible.com"); print(r)'
+```
+This fails but
+```
+python -c 'import requests; r = requests.get("https://test.ansible.com", verify="myca.crt"); print(r)'
+```
+succeeds.
